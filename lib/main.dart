@@ -32,6 +32,8 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
 
 
+  var bgcolor;
+
   var wtcontroller = TextEditingController();
   var ftcontroller = TextEditingController();
   var incontroller = TextEditingController();
@@ -47,69 +49,88 @@ class _MyHomePageState extends State<MyHomePage> {
 
         title: Text(widget.title),
       ),
-      body: Center(
-        child: Container(
-          width: 200,
-          child: Column(mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-            Text("BMI", style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),),
+      body: Container(
+        color: bgcolor,
+        child: Center(
+          child: Container(
+            width: 200,
+            child: Column(mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+              Text("BMI", style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),),
 
-              TextField(controller: wtcontroller,
-              decoration: InputDecoration(
-                label: Text("Enter your weight"),
-                prefixIcon: Icon(Icons.line_weight),
-              ),
-              keyboardType: TextInputType.number,),
-            SizedBox(height: 20,),
-            TextField(controller: ftcontroller,
-              decoration: InputDecoration(
-                label: Text("Enter your height feet"),
-                prefixIcon: Icon(Icons.height),
-              ),
-              keyboardType: TextInputType.number,),
+                TextField(controller: wtcontroller,
+                decoration: InputDecoration(
+                  label: Text("Enter your weight"),
+                  prefixIcon: Icon(Icons.line_weight),
+                ),
+                keyboardType: TextInputType.number,),
               SizedBox(height: 20,),
-              TextField(decoration: InputDecoration(
-                label: Text("Enter your height in inch"),
-                prefixIcon: Icon(Icons.height_rounded),
+              TextField(controller: ftcontroller,
+                decoration: InputDecoration(
+                  label: Text("Enter your height feet"),
+                  prefixIcon: Icon(Icons.height),
+                ),
+                keyboardType: TextInputType.number,),
+                SizedBox(height: 20,),
+                TextField(decoration: InputDecoration(
+                  label: Text("Enter your height in inch"),
+                  prefixIcon: Icon(Icons.height_rounded),
 
 
-              ),keyboardType:TextInputType.number,
-                controller: incontroller,),
-              SizedBox(height: 20,),
-              OutlinedButton(onPressed: (){
+                ),keyboardType:TextInputType.number,
+                  controller: incontroller,),
+                SizedBox(height: 20,),
+                OutlinedButton(onPressed: (){
 
-                var wt=wtcontroller.text.toString();
-                var ft=ftcontroller.text.toString();
-                var inch=incontroller.text.toString();
+                  var wt=wtcontroller.text.toString();
+                  var ft=ftcontroller.text.toString();
+                  var inch=incontroller.text.toString();
 
-                if(wt!="" && ft!="" && inch!=""){
+                  if(wt!="" && ft!="" && inch!=""){
 
-                  var iwt=int.parse(wt);
-                  var ift=int.parse(ft);
-                  var iinch=int.parse(inch);
+                    var iwt=int.parse(wt);
+                    var ift=int.parse(ft);
+                    var iinch=int.parse(inch);
 
-                  var tInch=(ift*12)+iinch;
-                  var tCm=tInch*2.54;
-                  var tM=tCm/100;
-                  var bmi=iwt/(tM*tM);
-
-                  setState(() {
-                    result="Result is ${bmi.toStringAsFixed(2)}";
-                  });
-
-                }
-                else{
-                  print("please fill all the fields");
-                  setState(() {
-                    result="please fill all the fields";
-                  });
-                }
+                    var tInch=(ift*12)+iinch;
+                    var tCm=tInch*2.54;
+                    var tM=tCm/100;
+                    var bmi=iwt/(tM*tM);
 
 
-              }, child: Text("Calculate now")),
-              Text("result: $result", style: TextStyle(fontSize: 44),)
-          ],),
+                    var msg="";
+                    if(bmi>25){
+                      msg="You are overweight";
+                      bgcolor=Colors.orange;
+                    }
+                    else if(bmi<18){
+                      msg="You are underweight";
+                      bgcolor=Colors.red;
+                    }
+                    else{
+                      msg="You are Healthy";
+                      bgcolor=Colors.blue.shade200;
+                    }
+
+                    setState(() {
+                      result="$msg \n Your BMI is ${bmi.toStringAsFixed(2)}";
+                      // bgcolor=bgcolor;
+                    });
+
+                  }
+                  else{
+                    print("please fill all the fields");
+                    setState(() {
+                      result="please fill all the fields";
+                    });
+                  }
+
+
+                }, child: Text("Calculate now")),
+                Text(" result: $result", style: TextStyle(fontSize: 24),)
+            ],),
+          ),
         ),
       )
     );
