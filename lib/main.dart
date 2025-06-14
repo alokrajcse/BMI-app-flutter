@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 void main() {
   runApp(const MyApp());
@@ -35,6 +36,8 @@ class _MyHomePageState extends State<MyHomePage> {
   var ftcontroller = TextEditingController();
   var incontroller = TextEditingController();
 
+  var result="";
+
   @override
   Widget build(BuildContext context) {
 
@@ -45,30 +48,69 @@ class _MyHomePageState extends State<MyHomePage> {
         title: Text(widget.title),
       ),
       body: Center(
-        child: Column(mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-          Text("BMI", style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),),
+        child: Container(
+          width: 200,
+          child: Column(mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+            Text("BMI", style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),),
 
-            TextField(controller: wtcontroller,
-            decoration: InputDecoration(
-              label: Text("Enter your weight"),
-              prefixIcon: Icon(Icons.line_weight),
-            ),
-            keyboardType: TextInputType.number,),
-          TextField(controller: wtcontroller,
-            decoration: InputDecoration(
-              label: Text("Enter your height"),
-              prefixIcon: Icon(Icons.height),
-            ),
-            keyboardType: TextInputType.number,),
-            TextField(decoration: InputDecoration(
-              label: Text("Enter your height ft"),
-              prefixIcon: Icon(Icons.height_rounded),
+              TextField(controller: wtcontroller,
+              decoration: InputDecoration(
+                label: Text("Enter your weight"),
+                prefixIcon: Icon(Icons.line_weight),
+              ),
+              keyboardType: TextInputType.number,),
+            SizedBox(height: 20,),
+            TextField(controller: ftcontroller,
+              decoration: InputDecoration(
+                label: Text("Enter your height feet"),
+                prefixIcon: Icon(Icons.height),
+              ),
+              keyboardType: TextInputType.number,),
+              SizedBox(height: 20,),
+              TextField(decoration: InputDecoration(
+                label: Text("Enter your height in inch"),
+                prefixIcon: Icon(Icons.height_rounded),
 
-            ),controller: ftcontroller,),
-            OutlinedButton(onPressed: (){}, child: Text("Calculate now"))
-        ],),
+
+              ),keyboardType:TextInputType.number,
+                controller: incontroller,),
+              SizedBox(height: 20,),
+              OutlinedButton(onPressed: (){
+
+                var wt=wtcontroller.text.toString();
+                var ft=ftcontroller.text.toString();
+                var inch=incontroller.text.toString();
+
+                if(wt!="" && ft!="" && inch!=""){
+
+                  var iwt=int.parse(wt);
+                  var ift=int.parse(ft);
+                  var iinch=int.parse(inch);
+
+                  var tInch=(ift*12)+iinch;
+                  var tCm=tInch*2.54;
+                  var tM=tCm/100;
+                  var bmi=iwt/(tM*tM);
+
+                  setState(() {
+                    result="Result is ${bmi.toStringAsFixed(2)}";
+                  });
+
+                }
+                else{
+                  print("please fill all the fields");
+                  setState(() {
+                    result="please fill all the fields";
+                  });
+                }
+
+
+              }, child: Text("Calculate now")),
+              Text("result: $result", style: TextStyle(fontSize: 44),)
+          ],),
+        ),
       )
     );
   }
